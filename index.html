@@ -1,0 +1,247 @@
+echo "# index.html" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/firemonkeinferno/index.html.git
+git push -u origin main
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Historical Scene</title>
+
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    background: #2e2e2e;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    color: white;
+}
+
+/* Scene */
+.scene {
+    position: relative;
+    width: 500px;
+    height: 600px;
+    background: linear-gradient(#444, #222);
+    box-shadow: 0 0 50px rgba(0,0,0,0.8);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Guillotine */
+.frame {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px;
+    height: 500px;
+}
+
+.post {
+    position: absolute;
+    width: 25px;
+    height: 100%;
+    background: #5a3e2b;
+}
+
+.post.left { left: 0; }
+.post.right { right: 0; }
+
+.top-beam {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 25px;
+    background: #4a2f1d;
+}
+
+.blade {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 160px;
+    height: 120px;
+    background: linear-gradient(135deg, #bbb 50%, #888 50%);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
+    transition: top 0.4s ease-in-out;
+}
+
+.stocks {
+    position: absolute;
+    bottom: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 180px;
+    height: 30px;
+    background: #4a2f1d;
+    border-radius: 20px;
+}
+
+/* Man */
+.man {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 200px;
+}
+
+.head {
+    width: 50px;
+    height: 50px;
+    background: #d9b38c;
+    border-radius: 50%;
+    margin: 0 auto;
+    position: relative;
+    top: 20px;
+}
+
+.body {
+    width: 80px;
+    height: 120px;
+    background: #2f3e46;
+    margin: 0 auto;
+    border-radius: 10px;
+    position: relative;
+    top: 10px;
+}
+
+.arms {
+    position: absolute;
+    width: 120px;
+    height: 20px;
+    background: #2f3e46;
+    top: 60px;
+    left: -20px;
+    border-radius: 10px;
+}
+
+.legs {
+    position: absolute;
+    width: 20px;
+    height: 100px;
+    background: #1b263b;
+    bottom: 0;
+    left: 15px;
+}
+
+.legs.right { left: 45px; }
+
+/* Buttons */
+.controls {
+    margin-top: 20px;
+}
+
+button {
+    padding: 12px 24px;
+    font-size: 16px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#releaseBtn {
+    background: #8b0000;
+    color: white;
+}
+
+#releaseBtn:hover:not(:disabled) {
+    background: #a30000;
+}
+
+#resetBtn {
+    background: #444;
+    color: white;
+}
+
+#resetBtn:hover:not(:disabled) {
+    background: #666;
+}
+
+button:disabled {
+    background: #555;
+    cursor: not-allowed;
+}
+
+/* Shake animation */
+@keyframes shake {
+    0% { transform: translate(0px, 0px); }
+    25% { transform: translate(5px, -5px); }
+    50% { transform: translate(-5px, 5px); }
+    75% { transform: translate(5px, 5px); }
+    100% { transform: translate(0px, 0px); }
+}
+
+.shake {
+    animation: shake 0.3s;
+}
+</style>
+</head>
+<body>
+
+<div class="scene" id="scene">
+    <div class="frame">
+        <div class="post left"></div>
+        <div class="post right"></div>
+        <div class="top-beam"></div>
+        <div class="blade" id="blade"></div>
+        <div class="stocks"></div>
+    </div>
+
+    <div class="man">
+        <div class="head"></div>
+        <div class="body"></div>
+        <div class="arms"></div>
+        <div class="legs"></div>
+        <div class="legs right"></div>
+    </div>
+</div>
+
+<div class="controls">
+    <button onclick="releaseBlade()" id="releaseBtn">Release Blade</button>
+    <button onclick="resetScene()" id="resetBtn" disabled>Reset</button>
+</div>
+
+<script>
+const blade = document.getElementById("blade");
+const scene = document.getElementById("scene");
+const releaseBtn = document.getElementById("releaseBtn");
+const resetBtn = document.getElementById("resetBtn");
+
+function releaseBlade() {
+    blade.style.top = "330px";
+    scene.classList.add("shake");
+
+    releaseBtn.disabled = true;
+    resetBtn.disabled = false;
+
+    setTimeout(() => {
+        scene.classList.remove("shake");
+    }, 300);
+}
+
+function resetScene() {
+    blade.style.top = "50px";
+
+    releaseBtn.disabled = false;
+    resetBtn.disabled = true;
+}
+</script>
+
+</body>
+</html>
